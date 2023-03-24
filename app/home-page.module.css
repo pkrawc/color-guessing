@@ -1,0 +1,20 @@
+.main {
+  display: grid;
+  place-items: center;
+  padding: 2rem;
+  min-height: 100vh;
+}
+
+.entry {
+  background: var(--color-gamit-cover), var(--color-gamit);
+  border-radius: 0.25rem;
+  border: 0.5rem solid var(--color-ui-900);
+  box-shadow: 0 4px 8px -4px rgba(0, 0, 0, 0.24);
+  width: 100%;
+  max-width: var(--container-width);
+  padding: 4rem;
+}
+
+.entry button {
+  margin-top: 2rem;
+}

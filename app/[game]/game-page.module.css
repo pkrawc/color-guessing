@@ -1,0 +1,3 @@
+.gameMain {
+  composes: main from "../home-page.module.css";
+}
