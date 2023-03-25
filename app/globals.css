@@ -56,4 +56,5 @@ button {
   background: var(--color-ui-900);
   color: var(--color-ui-100);
   border-radius: 0.25rem;
+  text-align: center;
 }

@@ -1,0 +1,32 @@
+.wrapper {
+  position: relative;
+  display: block;
+}
+
+.wrapper input {
+  all: unset;
+  padding: 2.25rem 1rem 0.75rem;
+  border: 1px solid var(--color-ui-300);
+  border-radius: 0.25rem;
+  font-size: 1rem;
+  text-align: inherit;
+  text-transform: inherit;
+  background: var(--color-ui-100);
+  color: var(--color-ui-900);
+  width: calc(100% - 2rem);
+}
+
+.wrapper .label {
+  position: absolute;
+  left: 1rem;
+  top: 1.5rem;
+  color: var(--color-ui-600);
+}
+
+.wrapper:focus-within {
+  border-color: var(--color-ui-800);
+}
+
+.wrapper:has(input:not(:placeholder-shown), :focus-within) .label {
+  top: 0.75rem;
+}

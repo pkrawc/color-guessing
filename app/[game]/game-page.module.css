@@ -1,3 +1,14 @@
 .gameMain {
   composes: main from "../home-page.module.css";
 }
+
+.formMain {
+  composes: main from "../home-page.module.css";
+}
+
+.form {
+  display: grid;
+  width: 100%;
+  max-width: var(--container-width);
+  gap: 1rem;
+}

@@ -1,9 +1,6 @@
 import { createClient } from "@supabase/supabase-js"
 
-const supabaseKey = process.env.SUPABASE_KEY
+const supabaseUrl = "https://gxwdfktnlrkvokalyerq.supabase.co"
+const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_KEY as string
 
-export const realtime = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.NEXT_PUBLIC_SUPABASE_KEY!,
-  { realtime: { params: { eventsPerSecond: 10 } } }
-)
+export const supabase = createClient(supabaseUrl, supabaseKey)
