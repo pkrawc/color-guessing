@@ -1,3 +1,9 @@
+@property --gradient-angle {
+  syntax: "<angle>";
+  inherits: false;
+  initial-value: 0deg;
+}
+
 :root {
   --color-ui-900: #101e1a;
   --color-ui-800: #25322f;
@@ -10,18 +16,19 @@
   --color-ui-100: #e7e9e8;
 
   --color-gamit: conic-gradient(
-    from 0 at 60% 60%,
+    from var(--gradient-angle) at 60% 60%,
     #ed2031,
     #74429b,
     #29479d 90deg,
     #128b44 200deg,
-    #f9ec24 270deg,
+    #9acb26 230deg,
+    #f9f224 270deg,
     #ed2031
   );
   --color-gamit-cover: radial-gradient(
-    circle at 60% 60%,
+    farthest-corner at 60% 60%,
     rgba(255, 255, 255, 0.96),
-    rgba(255, 255, 255, 0) 60%
+    rgba(255, 255, 255, 0)
   );
 
   --container-width: 800px;
@@ -39,6 +46,16 @@ body {
   padding: 0;
   color: var(--color-ui-900);
   background: var(--color-ui-100);
+  animation: gradient-animation 20s linear infinite;
+}
+
+@keyframes gradient-animation {
+  0% {
+    --gradient-angle: 0deg;
+  }
+  100% {
+    --gradient-angle: 360deg;
+  }
 }
 
 button {

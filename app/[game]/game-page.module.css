@@ -12,3 +12,8 @@
   max-width: var(--container-width);
   gap: 1rem;
 }
+
+.colorGrid {
+  display: grid;
+  grid-template-columns: repeat(30, 1fr);
+}

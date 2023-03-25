@@ -56,8 +56,7 @@ export default function GamePage({ params }: { params: { game: string } }) {
       <main className={styles.formMain}>
         <form className={styles.form} onSubmit={handleNameSubmit}>
           <p>
-            Create a username to join the game. You can use any name you want,
-            but it must be unique and only contain letters and numbers.
+            Create a username to join the game. Usernames cannot contain spaces.
           </p>
           <Input
             id="name"
