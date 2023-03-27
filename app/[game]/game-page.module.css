@@ -11,19 +11,20 @@
 
 .gameMain {
   display: grid;
-  align-content: end;
-  justify-content: center;
   width: 100vw;
   min-height: 100vh;
   background-color: var(--color-ui-900);
-  padding-bottom: 1rem;
+  gap: 1rem;
+  place-content: start stretch;
+  padding: 1rem;
+  overflow-x: auto;
 }
 
 .gameBoard {
   display: grid;
   grid-template-columns: repeat(30, 1fr);
-  width: calc(100vw - 2rem);
   background: var(--color-ui-900);
+  min-width: 960px;
 }
 
 .gameTile {
@@ -32,14 +33,20 @@
 }
 
 .gameDisplay {
-  position: fixed;
-  top: 1rem;
-  right: 5rem;
+  display: flex;
+  flex-direction: row-reverse;
+  align-items: center;
+  gap: 1rem;
   background: var(--color-ui-100);
   border-radius: 3rem;
   min-width: 10rem;
-  padding: 0.5rem;
+  padding: 0rem 1rem;
   box-shadow: 0 6px 12px -6px rgba(0, 0, 0, 0.24);
+}
+
+.gameDisplay button {
+  /* padding: 0.25rem 0.5rem; */
+  border-radius: 2rem;
 }
 
 .playerList {
@@ -65,10 +72,4 @@
 
 .playerAvatar:not(:first-of-type) {
   margin-right: -0.75rem;
-}
-
-@media screen and (min-width: 600px) {
-  .gameBoard {
-    width: calc(100vw - 10rem);
-  }
 }

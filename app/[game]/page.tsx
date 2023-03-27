@@ -64,8 +64,8 @@ export default function GamePage({ params }: { params: { game: string } }) {
   }
   return (
     <main className={styles.gameMain}>
-      <GameBoard />
       <GameDisplay players={players} />
+      <GameBoard />
     </main>
   )
 }
@@ -80,6 +80,7 @@ function GameDisplay({ players }: any) {
           </li>
         ))}
       </ul>
+      <button>Start Game</button>
     </div>
   )
 }
