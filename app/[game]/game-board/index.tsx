@@ -1,7 +1,7 @@
 "use client"
 
 import React, { useContext } from "react"
-import styles from "./game-page.module.css"
+import styles from "./styles.module.css"
 import boardData from "./board-data.json"
 
 const GameContext = React.createContext({ game: null })

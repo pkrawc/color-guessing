@@ -5,6 +5,7 @@ import { useEffect, useState } from "react"
 import { supabase } from "@src/store"
 import { Input } from "@src/ui"
 import { GameBoard } from "./game-board"
+import { GameDisplay } from "./game-display"
 
 interface Player {
   userId: string
@@ -63,24 +64,11 @@ export default function GamePage({ params }: { params: { game: string } }) {
     )
   }
   return (
-    <main className={styles.gameMain}>
-      <GameDisplay players={players} />
-      <GameBoard />
-    </main>
-  )
-}
-
-function GameDisplay({ players }: any) {
-  return (
-    <div className={styles.gameDisplay}>
-      <ul className={styles.playerList}>
-        {players.map(([name, obj]: any) => (
-          <li className={styles.playerAvatar} key={name}>
-            {name}
-          </li>
-        ))}
-      </ul>
-      <button>Start Game</button>
+    <div className={styles.gameWrapper}>
+      <main className={styles.gameMain}>
+        <GameDisplay players={players} url={game} />
+        <GameBoard />
+      </main>
     </div>
   )
 }

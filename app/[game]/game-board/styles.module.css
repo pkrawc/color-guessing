@@ -1,0 +1,11 @@
+.gameBoard {
+  display: grid;
+  grid-template-columns: repeat(30, 1fr);
+  background: var(--color-ui-900);
+  min-width: 960px;
+}
+
+.gameTile {
+  aspect-ratio: 1 / 1;
+  border: 2px solid var(--color-ui-900);
+}

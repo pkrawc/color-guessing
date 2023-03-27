@@ -10,6 +10,8 @@
   --screen-lg: 1024px;
   --screen-xl: 1280px;
 
+  --container-width: 1024px;
+
   --gradient-angle: 0deg;
 
   --color-ui-900: #101e1a;
@@ -38,8 +40,6 @@
     rgba(255, 255, 255, 0.96),
     rgba(255, 255, 255, 0)
   );
-
-  --container-width: 800px;
 }
 
 * {
