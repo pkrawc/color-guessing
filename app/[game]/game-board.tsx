@@ -2,6 +2,7 @@
 
 import React, { useContext } from "react"
 import styles from "./game-page.module.css"
+import gameData from "./game.json"
 
 const colors = [
   "hsl(0, 100%, 50%)",
@@ -34,7 +35,7 @@ export function GameBoard() {
 
   return (
     <div className={styles.gameBoard}>
-      {gameTiles.map((color, i) => (
+      {gameData.flat().map((color, i) => (
         <div
           className={styles.gameTile}
           key={color + i}

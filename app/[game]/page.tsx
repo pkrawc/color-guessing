@@ -4,8 +4,6 @@ import styles from "./game-page.module.css"
 import { useEffect, useState } from "react"
 import { supabase } from "@src/store"
 import { Input } from "@src/ui"
-import colors from "./colors.json"
-import gameData from "./game.json"
 import { GameBoard } from "./game-board"
 
 interface Player {
@@ -82,16 +80,6 @@ function GameDisplay({ players }: any) {
           </li>
         ))}
       </ul>
-    </div>
-  )
-}
-
-function GameBoard() {
-  return (
-    <div className={styles.gameGrid}>
-      {gameData.flat().map((color) => (
-        <div className={styles.colorSquare} style={{ background: color }} />
-      ))}
     </div>
   )
 }
