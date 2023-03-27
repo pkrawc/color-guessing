@@ -5,6 +5,7 @@
 }
 
 :root {
+  --gradient-angle: 0deg;
   --color-ui-900: #101e1a;
   --color-ui-800: #2a3733;
   --color-ui-700: #44504d;
@@ -23,7 +24,7 @@
     #29479d 90deg,
     #128b44 200deg,
     #9acb26 230deg,
-    #f9f224 270deg,
+    #ece521 270deg,
     #ed2031
   );
   --color-gamit-cover: radial-gradient(

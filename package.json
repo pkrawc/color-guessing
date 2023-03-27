@@ -23,6 +23,7 @@
     "semi": false
   },
   "devDependencies": {
+    "cheerio": "^1.0.0-rc.12",
     "encoding": "^0.1.13"
   }
 }
