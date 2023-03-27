@@ -6,14 +6,15 @@
 
 :root {
   --color-ui-900: #101e1a;
-  --color-ui-800: #25322f;
-  --color-ui-700: #3b4743;
-  --color-ui-600: #505b58;
-  --color-ui-500: #666f6d;
-  --color-ui-400: #7b8481;
-  --color-ui-300: #919896;
-  --color-ui-200: #a6acaa;
-  --color-ui-100: #e7e9e8;
+  --color-ui-800: #2a3733;
+  --color-ui-700: #44504d;
+  --color-ui-600: #5f6966;
+  --color-ui-500: #79817f;
+  --color-ui-400: #939a98;
+  --color-ui-300: #adb3b1;
+  --color-ui-200: #c8ccca;
+  --color-ui-100: #e2e4e4;
+  --color-ui-100: #fdfdfd;
 
   --color-gamit: conic-gradient(
     from var(--gradient-angle) at 60% 60%,
@@ -46,7 +47,7 @@ body {
   padding: 0;
   color: var(--color-ui-900);
   background: var(--color-ui-100);
-  animation: gradient-animation 20s linear infinite;
+  animation: gradient-animation 45s ease-in-out infinite;
 }
 
 @keyframes gradient-animation {

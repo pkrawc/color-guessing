@@ -1,7 +1,3 @@
-.gameMain {
-  composes: main from "../home-page.module.css";
-}
-
 .formMain {
   composes: main from "../home-page.module.css";
 }
@@ -13,7 +9,66 @@
   gap: 1rem;
 }
 
-.colorGrid {
+.gameMain {
+  display: grid;
+  align-content: end;
+  justify-content: center;
+  width: 100vw;
+  min-height: 100vh;
+  background-color: var(--color-ui-900);
+  padding-bottom: 1rem;
+}
+
+.gameBoard {
   display: grid;
   grid-template-columns: repeat(30, 1fr);
+  width: calc(100vw - 2rem);
+  background: var(--color-ui-900);
+}
+
+.gameTile {
+  aspect-ratio: 1 / 1;
+  border: 2px solid var(--color-ui-900);
+}
+
+.gameDisplay {
+  position: fixed;
+  top: 1rem;
+  right: 5rem;
+  background: var(--color-ui-100);
+  border-radius: 3rem;
+  min-width: 10rem;
+  padding: 0.5rem;
+  box-shadow: 0 6px 12px -6px rgba(0, 0, 0, 0.24);
+}
+
+.playerList {
+  display: flex;
+  flex-direction: row-reverse;
+  list-style: none;
+  padding: 0.5rem;
+  margin: 0;
+  min-width: 5rem;
+}
+
+.playerAvatar {
+  display: grid;
+  width: 3rem;
+  height: 3rem;
+  font-weight: bold;
+  place-items: center;
+  border-radius: 50%;
+  background: var(--color-ui-600);
+  color: var(--color-ui-100);
+  font-size: 1rem;
+}
+
+.playerAvatar:not(:first-of-type) {
+  margin-right: -0.75rem;
+}
+
+@media screen and (min-width: 600px) {
+  .gameBoard {
+    width: calc(100vw - 10rem);
+  }
 }

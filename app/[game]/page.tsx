@@ -4,6 +4,7 @@ import styles from "./game-page.module.css"
 import { useEffect, useState } from "react"
 import { supabase } from "@src/store"
 import { Input } from "@src/ui"
+import { GameBoard } from "./game-board"
 
 interface Player {
   userId: string
@@ -15,29 +16,22 @@ export default function GamePage({ params }: { params: { game: string } }) {
   const { game } = params
   const [name, setName] = useState<null | string>(null)
   const [channel, setChannel] = useState<null | any>(null)
-  const [players, setPlayers] = useState<[string, Player][]>([])
+  const [players, setPlayers] = useState<any>([])
   useEffect(() => {
     if (name) {
-      const channel = supabase.channel(`game:${game}`, {
+      const nextChannel = supabase.channel(`game:${game}`, {
         config: { presence: { key: name } },
       })
-      setChannel(channel)
-    }
-  }, [name])
-  useEffect(() => {
-    if (channel) {
-      // channel.on("presence", { event: "join" }, (payload: any) => {
-      //   console.log("presence:subscribed", payload)
-      // })
-      channel.on("presence", { event: "sync" }, () => {
-        const sharedPlayers = Object.entries<Player>(channel.presenceState())
+      nextChannel.on("presence", { event: "sync" }, () => {
+        const sharedPlayers = Object.entries(nextChannel.presenceState())
         setPlayers(sharedPlayers)
       })
-      channel.subscribe(async (status: string) => {
+      nextChannel.subscribe(async (status: string) => {
         if (status === "SUBSCRIBED") {
-          await channel.track({ userId: name, score: 0 })
+          await nextChannel.track({ userId: name, score: 0 })
         }
       })
+      setChannel(nextChannel)
     }
     return () => {
       if (channel) {
@@ -45,7 +39,7 @@ export default function GamePage({ params }: { params: { game: string } }) {
         setChannel(null)
       }
     }
-  }, [channel])
+  }, [name])
   function handleNameSubmit(e: any) {
     e.preventDefault()
     const name = e.target.name.value
@@ -55,31 +49,37 @@ export default function GamePage({ params }: { params: { game: string } }) {
     return (
       <main className={styles.formMain}>
         <form className={styles.form} onSubmit={handleNameSubmit}>
-          <p>
-            Create a username to join the game. Usernames cannot contain spaces.
-          </p>
+          <p>Enter your initials to join the game.</p>
           <Input
             id="name"
-            label="Username"
+            label="Your Initials"
             required
             pattern="[a-zA-Z0-9]+"
-            error="Cannot contain spaces"
           />
           <button>Set Name</button>
+          <p>Share this URL with anyone you want to play with.</p>
         </form>
       </main>
     )
   }
   return (
     <main className={styles.gameMain}>
-      <div>
-        <h1>Game Page</h1>
-        <ul>
-          {players.map(([name, obj]) => (
-            <li key={obj.presence_ref}>{name}</li>
-          ))}
-        </ul>
-      </div>
+      <GameBoard />
+      <GameDisplay players={players} />
     </main>
+  )
+}
+
+function GameDisplay({ players }: any) {
+  return (
+    <div className={styles.gameDisplay}>
+      <ul className={styles.playerList}>
+        {players.map(([name, obj]: any) => (
+          <li className={styles.playerAvatar} key={name}>
+            {name}
+          </li>
+        ))}
+      </ul>
+    </div>
   )
 }
