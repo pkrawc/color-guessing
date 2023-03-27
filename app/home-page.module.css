@@ -1,7 +1,7 @@
 .main {
   display: grid;
   place-items: center;
-  padding: 2rem;
+  padding: 1rem;
   min-height: 100vh;
 }
 
@@ -12,9 +12,18 @@
   box-shadow: 0 4px 8px -4px rgba(0, 0, 0, 0.24);
   width: 100%;
   max-width: var(--container-width);
-  padding: 4rem;
+  padding: 2rem;
 }
 
 .entry button {
   margin-top: 2rem;
+}
+
+@media screen and (min-width: 640px) {
+  .main {
+    padding: 2rem;
+  }
+  .entry {
+    padding: 4rem;
+  }
 }

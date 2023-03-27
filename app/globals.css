@@ -5,7 +5,13 @@
 }
 
 :root {
+  --screen-sm: 640px;
+  --screen-md: 760px;
+  --screen-lg: 1024px;
+  --screen-xl: 1280px;
+
   --gradient-angle: 0deg;
+
   --color-ui-900: #101e1a;
   --color-ui-800: #2a3733;
   --color-ui-700: #44504d;
