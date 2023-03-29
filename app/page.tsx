@@ -1,16 +1,7 @@
-"use client"
-
-import Link from "next/link"
 import styles from "./home-page.module.css"
-import { useEffect, useState } from "react"
+import { NewGame } from "./new-game"
 
 export default function Home() {
-  const [uuid, setUuid] = useState<null | string>(null)
-  useEffect(() => {
-    if (!uuid) {
-      setUuid(self.crypto.randomUUID())
-    }
-  }, [])
   return (
     <main className={styles.main}>
       <div className={styles.entry}>
@@ -21,9 +12,7 @@ export default function Home() {
           game where players join a room and give one and two word clues to
           describe a color.
         </p>
-        <Link href={`/${uuid}`}>
-          <button disabled={!uuid}>Start a new game.</button>
-        </Link>
+        <NewGame />
       </div>
     </main>
   )
