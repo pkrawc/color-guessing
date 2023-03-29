@@ -1,46 +1,72 @@
 "use client"
 
 import styles from "./game-page.module.css"
-import { useEffect, useState } from "react"
+import { useEffect, useReducer, useState } from "react"
 import { supabase } from "@src/store"
 import { Input } from "@src/ui"
 import { GameBoard } from "./game-board"
 import { GameDisplay } from "./game-display"
 
-interface Player {
-  userId: string
-  score: number
-  presence_ref: string
+interface GameState {
+  players: any[]
+  turns: any[]
+}
+
+interface GameAction {
+  type: string
+  payload: any
+}
+
+// Store game state in supabase, and use a channel to sync it with other players.
+function useGame(gameSlug: string, username: string | null) {
+  const [gameState, dispatch] = useReducer(
+    (state: GameState, action: GameAction) => ({ ...state, ...action.payload }),
+    { players: [], turns: [] }
+  )
+  useEffect(() => {
+    if (username) {
+      const channel = supabase.channel(`game:${gameSlug}`, {
+        config: { presence: { key: username } },
+      })
+      channel.on("presence", { event: "sync" }, () => {
+        const sharedPlayers = Object.entries(channel.presenceState())
+        dispatch({
+          type: "UPDATE_PLAYERS",
+          payload: { players: sharedPlayers },
+        })
+      })
+      channel.on(
+        "postgres_changes",
+        {
+          event: "INSERT",
+          table: "games",
+          schema: "public",
+          filter: `game_id=eq.${gameSlug}`,
+        },
+        (payload: any) => {
+          dispatch({
+            type: "UPDATE_TURN",
+            payload: { turns: [...gameState, ...payload.new] },
+          })
+        }
+      )
+      channel.subscribe(async (status: string) => {
+        if (status === "SUBSCRIBED") {
+          await channel.track({
+            userId: username,
+            online: new Date().toISOString(),
+          })
+        }
+      })
+    }
+  }, [username])
+  return gameState
 }
 
 export default function GamePage({ params }: { params: { game: string } }) {
   const { game } = params
   const [name, setName] = useState<null | string>(null)
-  const [channel, setChannel] = useState<null | any>(null)
-  const [players, setPlayers] = useState<any>([])
-  useEffect(() => {
-    if (name) {
-      const nextChannel = supabase.channel(`game:${game}`, {
-        config: { presence: { key: name } },
-      })
-      nextChannel.on("presence", { event: "sync" }, () => {
-        const sharedPlayers = Object.entries(nextChannel.presenceState())
-        setPlayers(sharedPlayers)
-      })
-      nextChannel.subscribe(async (status: string) => {
-        if (status === "SUBSCRIBED") {
-          await nextChannel.track({ userId: name, score: 0 })
-        }
-      })
-      setChannel(nextChannel)
-    }
-    return () => {
-      if (channel) {
-        supabase.removeChannel(channel)
-        setChannel(null)
-      }
-    }
-  }, [name])
+  const { players } = useGame(game, name)
   function handleNameSubmit(e: any) {
     e.preventDefault()
     const name = e.target.name.value
