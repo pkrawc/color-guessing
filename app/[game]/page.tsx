@@ -29,10 +29,17 @@ function useGame(gameSlug: string, username: string | null) {
         config: { presence: { key: username } },
       })
       channel.on("presence", { event: "sync" }, () => {
-        const sharedPlayers = Object.entries(channel.presenceState())
+        const sharedPlayers = Object.values(channel.presenceState()).map(
+          (p) => p[0]
+        )
         dispatch({
           type: "UPDATE_PLAYERS",
-          payload: { players: sharedPlayers },
+          payload: {
+            players: sharedPlayers.sort(
+              (a: any, b: any) => a.online - b.online
+            ),
+            me: sharedPlayers.find((p: any) => p.username === username),
+          },
         })
       })
       channel.on(
@@ -45,7 +52,7 @@ function useGame(gameSlug: string, username: string | null) {
         },
         (payload: any) => {
           dispatch({
-            type: "UPDATE_TURN",
+            type: "NEW_TURN",
             payload: { turns: [...gameState, ...payload.new] },
           })
         }
@@ -53,7 +60,7 @@ function useGame(gameSlug: string, username: string | null) {
       channel.subscribe(async (status: string) => {
         if (status === "SUBSCRIBED") {
           await channel.track({
-            userId: username,
+            username,
             online: new Date().toISOString(),
           })
         }
@@ -66,10 +73,10 @@ function useGame(gameSlug: string, username: string | null) {
 export default function GamePage({ params }: { params: { game: string } }) {
   const { game } = params
   const [name, setName] = useState<null | string>(null)
-  const { players } = useGame(game, name)
+  const { players, me } = useGame(game, name)
   function handleNameSubmit(e: any) {
     e.preventDefault()
-    const name = e.target.name.value
+    const name = e.target.name.value.toUpperCase()
     setName(name)
   }
   if (!name) {
@@ -92,7 +99,7 @@ export default function GamePage({ params }: { params: { game: string } }) {
   return (
     <div className={styles.gameWrapper}>
       <main className={styles.gameMain}>
-        <GameDisplay players={players} url={game} />
+        <GameDisplay players={players} url={game} me={me} />
         <GameBoard />
       </main>
     </div>

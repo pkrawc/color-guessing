@@ -1,17 +1,13 @@
 .main {
   display: grid;
-  place-items: center;
-  padding: 1rem;
-  min-height: 100vh;
+  place-items: stretch;
+  min-height: 100svh;
 }
 
 .entry {
   background: var(--color-gamit-cover), var(--color-gamit);
-  border-radius: 0.25rem;
   border: 0.5rem solid var(--color-ui-900);
   box-shadow: 0 4px 8px -4px rgba(0, 0, 0, 0.24);
-  width: 100%;
-  max-width: var(--container-width);
   padding: 2rem;
 }
 
@@ -21,9 +17,13 @@
 
 @media screen and (min-width: 640px) {
   .main {
-    padding: 2rem;
+    place-items: center;
+    padding: 1rem;
   }
   .entry {
     padding: 4rem;
+    width: 100%;
+    max-width: var(--container-width);
+    border-radius: 0.25rem;
   }
 }
