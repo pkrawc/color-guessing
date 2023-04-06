@@ -2,26 +2,35 @@
 
 import { MouseEvent } from "react"
 import styles from "./styles.module.css"
+import { supabase } from "@src/store"
 
-export function GameDisplay({ players, url, me }: any) {
-  function handleCreateTurn(e: MouseEvent) {
+export function GameDisplay({ players, id, me }: any) {
+  async function handleCreateTurn(e: MouseEvent) {
     // Add turn to supabase table
+    e.preventDefault()
+    const { error } = await supabase.from("turns").insert({
+      game_id: id,
+      hinter_id: me.presence_ref,
+    })
+    if (error) {
+      console.log(error)
+    }
   }
 
   function handleShare(e: MouseEvent) {
     e.preventDefault()
     if (navigator.share) {
       navigator.share({
-        url: `${window.location.origin}/${url}`,
+        url: `${window.location.origin}/game/${id}`,
         text: "Join my game",
       })
     } else {
-      navigator.clipboard.writeText(`${window.location.origin}/${url}`)
+      navigator.clipboard.writeText(`${window.location.origin}/${id}`)
     }
   }
   return (
     <div className={styles.gameDisplay}>
-      <button onClick={handleCreateTurn}>Draw Card</button>
+      <button onClick={handleCreateTurn}>Pick Color</button>
       <button onClick={handleShare}>
         <img src="/share.svg" alt="share icon" />
       </button>

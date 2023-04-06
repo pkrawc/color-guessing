@@ -14,7 +14,7 @@ for (let y = 0; y < 16; y++) {
     const rect = $(rects[y * 30 + x])
     // const id = rect.attr("id")
     const color = rect.attr("fill")
-    gameColors[y] = [...(gameColors[y] || []), color]
+    gameColors[y] = [...(gameColors[y] || []), { color, x, y }]
   }
 }
 

@@ -1,5 +1,5 @@
 .formMain {
-  composes: main from "../home-page.module.css";
+  composes: main from "../../home-page.module.css";
 }
 
 .form {

@@ -11,7 +11,7 @@ export function NewGame() {
     }
   }, [])
   return (
-    <Link href={`/${uuid}`}>
+    <Link href={`/game/${uuid}`}>
       <button disabled={!uuid}>Start a new game.</button>
     </Link>
   )
