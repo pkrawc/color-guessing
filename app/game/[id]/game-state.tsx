@@ -20,7 +20,7 @@ interface Player {
 interface GameState {
   players: any[]
   turns: any[]
-  me: Player | null
+  me: Player
   activeTurn: boolean
   hinter: boolean
 }
@@ -30,8 +30,8 @@ interface GameAction {
   payload: any
 }
 
-// const GameContext = createContext(null)
-// const GameDispatchContext = createContext<Dispatch<GameAction> | null>(null)
+const GameContext = createContext<GameState | null>(null)
+const GameDispatchContext = createContext<Dispatch<GameAction> | null>(null)
 
 function gameReducer(state: GameState, action: GameAction) {
   switch (action.type) {
@@ -52,31 +52,91 @@ function gameReducer(state: GameState, action: GameAction) {
   }
 }
 
-// export function GameProvider({ children }: { children: ReactNode }) {
-//   const [gameState, dispatch] = useReducer(gameReducer, {
-//     players: [],
-//     turns: [],
-//     me: null,
-//     activeTurn: false,
-//     colorData,
-//     hinter: false,
-//   })
-//   return (
-//     <GameContext.Provider value={gameState}>
-//       <GameDispatchContext.Provider value={dispatch}>
-//         {children}
-//       </GameDispatchContext.Provider>
-//     </GameContext.Provider>
-//   )
-// }
+interface GameProviderProps {
+  children: ReactNode
+  username: string
+  id: string
+}
 
-// export function useGameState() {
-//   const context = useContext(GameContext)
-//   if (context === undefined) {
-//     throw new Error("useGameState must be used within a GameProvider")
-//   }
-//   return context
-// }
+export function GameProvider({ children, username, id }: GameProviderProps) {
+  const [gameState, dispatch] = useReducer(gameReducer, {
+    players: [],
+    turns: [],
+    me: null,
+    activeTurn: false,
+    colorData,
+    hinter: false,
+  })
+  useEffect(() => {
+    if (username) {
+      const channel = supabase.channel(`game:${id}`, {
+        config: { presence: { key: username } },
+      })
+      channel.on("presence", { event: "sync" }, () => {
+        const sharedPlayers = Object.values(channel.presenceState()).map(
+          (p) => p[0]
+        )
+        dispatch({
+          type: "UPDATE_PLAYERS",
+          payload: {
+            players: sharedPlayers.sort(
+              (a: any, b: any) => a.online - b.online
+            ),
+            me: sharedPlayers.find((p: any) => p.username === username),
+          },
+        })
+      })
+      channel.on(
+        "postgres_changes",
+        {
+          event: "INSERT",
+          table: "turns",
+          schema: "public",
+          filter: `game_id=eq.${id}`,
+        },
+        (payload: any) => {
+          console.log("new turn", payload)
+          dispatch({
+            type: "NEW_TURN",
+            payload: payload.new,
+          })
+        }
+      )
+      channel.subscribe(async (status: string) => {
+        if (status === "SUBSCRIBED") {
+          await channel.track({
+            username,
+            online: new Date().toISOString(),
+          })
+        }
+      })
+    }
+  }, [username])
+  // return gameState
+  return (
+    <GameContext.Provider value={gameState}>
+      <GameDispatchContext.Provider value={dispatch}>
+        {children}
+      </GameDispatchContext.Provider>
+    </GameContext.Provider>
+  )
+}
+
+export function useGameState() {
+  const context = useContext(GameContext)
+  if (context === null) {
+    throw new Error("useGameState must be used within a GameProvider")
+  }
+  return context
+}
+
+export function useGameDispatch() {
+  const context = useContext(GameDispatchContext)
+  if (context === undefined) {
+    throw new Error("useGameDispatch must be used within a GameProvider")
+  }
+  return context
+}
 
 export function useGame(id: string, username: string | null) {
   const [gameState, dispatch] = useReducer(gameReducer, {

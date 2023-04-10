@@ -1,10 +1,12 @@
 "use client"
 
-import { MouseEvent } from "react"
 import styles from "./styles.module.css"
+import { MouseEvent } from "react"
 import { supabase } from "@src/store"
+import { useGameState } from "../game-state"
 
-export function GameDisplay({ players, id, me }: any) {
+export function GameDisplay({ id }: { id: string }) {
+  const { players, me } = useGameState()
   async function handleCreateTurn(e: MouseEvent) {
     // Add turn to supabase table
     e.preventDefault()

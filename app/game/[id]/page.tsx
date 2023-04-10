@@ -5,7 +5,7 @@ import { useState } from "react"
 import { Input } from "@src/ui"
 import { GameBoard } from "./game-board"
 import { GameDisplay } from "./game-display"
-import { useGame } from "./game-state"
+import { useGame, GameProvider } from "./game-state"
 
 export default function GamePage({ params }: { params: { id: string } }) {
   const { id } = params
@@ -36,8 +36,10 @@ export default function GamePage({ params }: { params: { id: string } }) {
   return (
     <div className={styles.gameWrapper}>
       <main className={styles.gameMain}>
-        <GameDisplay players={players} id={id} me={me} />
-        <GameBoard board={colorData} hinter={hinter} />
+        <GameProvider id={id} username={name}>
+          <GameDisplay id={id} />
+          <GameBoard board={colorData} hinter={hinter} />
+        </GameProvider>
       </main>
     </div>
   )
